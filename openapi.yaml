@@ -1,0 +1,308 @@
+openapi: 3.0.3
+info:
+  title: AI Part Lookup Assistant API
+  version: 1.0.0
+  description: >-
+    Unified lookup of part, inventory, supplier, purchase order and delivery information.
+    Commercially sensitive values (unit cost, internal notes, purchase order prices) are masked
+    in every response and cannot be written through this API.
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:4000
+    description: Local development
+tags:
+  - name: parts
+  - name: health
+paths:
+  /api/health:
+    get:
+      tags: [health]
+      summary: Liveness probe used by App Service health checks
+      responses:
+        '200':
+          description: The service is running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  timestamp:
+                    type: string
+                    format: date-time
+  /api/parts:
+    get:
+      tags: [parts]
+      summary: Search parts by number, name, category or supplier
+      parameters:
+        - in: query
+          name: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+            maxLength: 64
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+      responses:
+        '200':
+          description: Matching parts (an empty list when nothing matches)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+  /api/parts/search:
+    post:
+      tags: [parts]
+      summary: Search parts using a JSON body
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query:
+                  type: string
+                  minLength: 2
+                  maxLength: 64
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+      responses:
+        '200':
+          description: Matching parts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+  /api/parts/{partNumber}:
+    parameters:
+      - in: path
+        name: partNumber
+        required: true
+        schema:
+          type: string
+          pattern: '^[A-Za-z]{3}-\d{4,6}$'
+    get:
+      tags: [parts]
+      summary: Get the unified record for a single part
+      responses:
+        '200':
+          description: The part record with sensitive fields masked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartDetail'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [parts]
+      summary: Update the editable fields of a part
+      parameters:
+        - in: header
+          name: x-user-id
+          required: false
+          description: Identifies the engineer for the audit trail.
+          schema:
+            type: string
+            pattern: '^[A-Za-z0-9._@-]{1,64}$'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartUpdate'
+      responses:
+        '200':
+          description: The update was applied and audited
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  part:
+                    $ref: '#/components/schemas/PartDetail'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    ValidationError:
+      description: The request failed validation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    NotFound:
+      description: The requested part or route does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+  schemas:
+    LifecycleStatus:
+      type: string
+      enum: [active, obsolete, pending-approval, restricted]
+    SearchResponse:
+      type: object
+      properties:
+        query:
+          type: string
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartSummary'
+    PartSummary:
+      type: object
+      properties:
+        partNumber:
+          type: string
+        partName:
+          type: string
+        category:
+          type: string
+        inventoryLevel:
+          type: integer
+        reorderPoint:
+          type: integer
+        lifecycleStatus:
+          $ref: '#/components/schemas/LifecycleStatus'
+        supplierName:
+          type: string
+        nextDeliveryDate:
+          type: string
+          nullable: true
+          format: date
+    PartDetail:
+      type: object
+      properties:
+        partNumber:
+          type: string
+        partName:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        unitOfMeasure:
+          type: string
+        inventoryLevel:
+          type: integer
+        reorderPoint:
+          type: integer
+        warehouseLocation:
+          type: string
+        lifecycleStatus:
+          $ref: '#/components/schemas/LifecycleStatus'
+        updatedAt:
+          type: string
+          format: date-time
+        supplier:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            contactEmail:
+              type: string
+              description: Partially masked.
+            contactPhone:
+              type: string
+              description: Partially masked.
+            country:
+              type: string
+            qualityRating:
+              type: number
+        purchaseOrders:
+          type: array
+          items:
+            type: object
+            properties:
+              poNumber:
+                type: string
+              quantity:
+                type: integer
+              status:
+                type: string
+                enum: [open, confirmed, in-transit, received, cancelled]
+              orderDate:
+                type: string
+                format: date
+              expectedDeliveryDate:
+                type: string
+                format: date
+              unitPriceUsd:
+                type: string
+                description: Always returned as MASKED.
+        sensitiveFields:
+          type: object
+          properties:
+            unitCostUsd:
+              type: string
+              description: Always returned as MASKED.
+            internalNotes:
+              type: string
+              description: Always returned as MASKED.
+    PartUpdate:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        inventoryLevel:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        reorderPoint:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        warehouseLocation:
+          type: string
+          pattern: '^[A-Za-z0-9-]{3,32}$'
+        lifecycleStatus:
+          $ref: '#/components/schemas/LifecycleStatus'
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string

@@ -1,0 +1,44 @@
+<!--
+  Azure API Management inbound policy for the AI Part Lookup Assistant API (ADR-001).
+  Import the OpenAPI document (openapi.yaml), then apply this policy at the API scope.
+-->
+<policies>
+  <inbound>
+    <base />
+    <cors allow-credentials="false">
+      <allowed-origins>
+        <origin>{{part-lookup-ui-origin}}</origin>
+      </allowed-origins>
+      <allowed-methods>
+        <method>GET</method>
+        <method>POST</method>
+        <method>PUT</method>
+        <method>OPTIONS</method>
+      </allowed-methods>
+      <allowed-headers>
+        <header>content-type</header>
+        <header>x-user-id</header>
+      </allowed-headers>
+    </cors>
+    <rate-limit calls="120" renewal-period="60" />
+    <quota calls="10000" renewal-period="86400" />
+    <set-header name="X-Forwarded-Host" exists-action="override">
+      <value>@(context.Request.OriginalUrl.Host)</value>
+    </set-header>
+  </inbound>
+  <backend>
+    <base />
+  </backend>
+  <outbound>
+    <base />
+    <set-header name="X-Powered-By" exists-action="delete" />
+    <set-header name="Strict-Transport-Security" exists-action="override">
+      <value>max-age=31536000; includeSubDomains</value>
+    </set-header>
+  </outbound>
+  <on-error>
+    <base />
+    <!-- Never surface backend exception details to callers. -->
+    <set-body>@{ return "{\"error\":{\"code\":\"gateway_error\",\"message\":\"The request could not be completed.\",\"details\":[]}}"; }</set-body>
+  </on-error>
+</policies>
