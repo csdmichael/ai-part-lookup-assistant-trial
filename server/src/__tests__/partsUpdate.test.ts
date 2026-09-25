@@ -78,6 +78,9 @@ describe('PUT /api/parts/:partNumber', () => {
       .send({ inventoryLevel: 620, unitCostUsd: 0.01, internalNotes: 'overwrite' });
 
     expect(response.status).toBe(400);
+    expect(response.body.error.details).toEqual([
+      { field: 'unitCostUsd, internalNotes', message: 'This field cannot be updated from the part lookup assistant' }
+    ]);
     const stored = ctx.db.prepare('SELECT unit_cost_usd FROM parts WHERE part_number = ?').get('GSK-11876') as {
       unit_cost_usd: number;
     };

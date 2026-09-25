@@ -59,6 +59,16 @@ export interface FieldError {
 }
 
 export function toFieldErrors(error: z.ZodError): FieldError[] {
+  const unrecognised = error.issues.filter((issue) => issue.code === 'unrecognized_keys');
+  if (unrecognised.length > 0) {
+    // Attempts to write fields that are not editable (for example cost) are reported on their own
+    // so the user sees why the request was refused instead of unrelated follow-on messages.
+    return unrecognised.map((issue) => ({
+      field: (issue as z.ZodIssue & { keys: string[] }).keys.join(', '),
+      message: 'This field cannot be updated from the part lookup assistant'
+    }));
+  }
+
   return error.issues.map((issue) => ({
     field: issue.path.join('.') || '_',
     message: issue.message
