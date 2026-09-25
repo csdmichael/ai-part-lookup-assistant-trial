@@ -39,7 +39,12 @@ export function validate(values: FormState): Record<string, string> {
     errors.reorderPoint = 'Obsolete parts must have a reorder point of 0';
   }
 
-  if (!/^[A-Za-z0-9-]{3,32}$/.test(values.warehouseLocation.trim())) {
+  const trimmedLocation = values.warehouseLocation.trim();
+  if (trimmedLocation.length < 3) {
+    errors.warehouseLocation = 'Warehouse location is required';
+  } else if (trimmedLocation.length > 32) {
+    errors.warehouseLocation = 'Warehouse location must be 32 characters or fewer';
+  } else if (!/^[A-Za-z0-9-]+$/.test(trimmedLocation)) {
     errors.warehouseLocation = 'Warehouse location may only contain letters, numbers and hyphens';
   }
 

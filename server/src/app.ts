@@ -35,8 +35,10 @@ export function createApp({
 
   app.disable('x-powered-by');
   app.use(helmet());
-  // CORS runs first so throttled (429) responses still carry the headers the browser needs.
+  // CORS runs first so throttled (429) responses still carry the headers the browser needs, and the
+  // request logger runs before throttling so rejected requests remain visible in operations.
   app.use(cors({ origin: allowedOrigins.length > 0 ? allowedOrigins : false }));
+  app.use(requestLogger(logger));
   app.use(
     rateLimit({
       windowMs: 60_000,
@@ -49,7 +51,6 @@ export function createApp({
     })
   );
   app.use(express.json({ limit: '32kb' }));
-  app.use(requestLogger(logger));
 
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });

@@ -60,6 +60,11 @@ export function toPartDetailView(part: PartAggregate): PartDetailView {
   };
 }
 
+/**
+ * Earliest expected delivery date across purchase orders that have not been received or cancelled.
+ * Dates in the past are deliberately included: an overdue delivery is exactly what an engineer
+ * chasing stock needs to see first.
+ */
 function nextDeliveryDate(part: PartAggregate): string | null {
   const pending = part.purchaseOrders
     .filter((po) => po.status === 'open' || po.status === 'confirmed' || po.status === 'in-transit')

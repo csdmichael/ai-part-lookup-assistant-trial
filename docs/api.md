@@ -56,7 +56,8 @@ curl "http://localhost:4000/api/parts?query=bearing"
 ```
 
 `nextDeliveryDate` is the earliest expected delivery date across purchase orders that are still open,
-confirmed or in transit, and is `null` when there are none.
+confirmed or in transit, and is `null` when there are none. Dates in the past are included on purpose so
+that overdue deliveries surface first.
 
 ## `POST /api/parts/search`
 
