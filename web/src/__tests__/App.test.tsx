@@ -1,10 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { App } from '../App';
-import { bearingDetail, bearingSummary, installFetchStub } from './fixtures';
+import { bearingDetail, bearingSummary, installFetchFailure, installFetchStub, restoreFetch } from './fixtures';
 
 describe('part lookup workflow', () => {
   afterEach(() => {
+    restoreFetch();
     jest.restoreAllMocks();
   });
 
@@ -89,6 +90,9 @@ describe('part lookup workflow', () => {
     await user.click(screen.getByRole('button', { name: 'Search' }));
     await user.click(await screen.findByRole('button', { name: /BRG-22045/ }));
     await user.click(await screen.findByRole('button', { name: 'Update part' }));
+    const reorderField = screen.getByLabelText('Reorder point');
+    await user.clear(reorderField);
+    await user.type(reorderField, '10');
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
 
     const alerts = await screen.findAllByRole('alert');
@@ -100,9 +104,7 @@ describe('part lookup workflow', () => {
 
   it('reports a friendly error when the API cannot be reached', async () => {
     const user = userEvent.setup();
-    global.fetch = jest.fn(async () => {
-      throw new Error('network down');
-    }) as unknown as typeof fetch;
+    installFetchFailure();
 
     render(<App />);
     await user.type(screen.getByLabelText(/search by part number/i), 'bearing');

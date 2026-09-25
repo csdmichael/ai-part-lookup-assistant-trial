@@ -54,6 +54,7 @@ export function UpdatePartForm({ part, isSaving, serverErrors, onCancel, onSubmi
     lifecycleStatus: part.lifecycleStatus
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [noChanges, setNoChanges] = useState(false);
 
   const combinedErrors: Record<string, string> = { ...errors };
   serverErrors.forEach((error) => {
@@ -61,6 +62,7 @@ export function UpdatePartForm({ part, isSaving, serverErrors, onCancel, onSubmi
   });
 
   function update<K extends keyof FormState>(field: K, value: FormState[K]) {
+    setNoChanges(false);
     setValues((current) => ({ ...current, [field]: value }));
   }
 
@@ -73,12 +75,28 @@ export function UpdatePartForm({ part, isSaving, serverErrors, onCancel, onSubmi
       return;
     }
 
-    onSubmit({
-      inventoryLevel: Number(values.inventoryLevel),
-      reorderPoint: Number(values.reorderPoint),
-      warehouseLocation: values.warehouseLocation.trim(),
-      lifecycleStatus: values.lifecycleStatus
-    });
+    // Only changed fields are sent, so the server audit log records what the engineer actually edited.
+    const changes: Partial<PartUpdate> = {};
+    if (Number(values.inventoryLevel) !== part.inventoryLevel) {
+      changes.inventoryLevel = Number(values.inventoryLevel);
+    }
+    if (Number(values.reorderPoint) !== part.reorderPoint) {
+      changes.reorderPoint = Number(values.reorderPoint);
+    }
+    if (values.warehouseLocation.trim() !== part.warehouseLocation) {
+      changes.warehouseLocation = values.warehouseLocation.trim();
+    }
+    if (values.lifecycleStatus !== part.lifecycleStatus) {
+      changes.lifecycleStatus = values.lifecycleStatus;
+    }
+
+    if (Object.keys(changes).length === 0) {
+      setNoChanges(true);
+      return;
+    }
+
+    setNoChanges(false);
+    onSubmit(changes);
   }
 
   function describedBy(field: string): string | undefined {
@@ -186,6 +204,11 @@ export function UpdatePartForm({ part, isSaving, serverErrors, onCancel, onSubmi
           Cancel
         </button>
       </div>
+      {noChanges ? (
+        <p className="field-error" role="alert">
+          There are no changes to save.
+        </p>
+      ) : null}
     </form>
   );
 }

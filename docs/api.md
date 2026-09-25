@@ -120,6 +120,7 @@ curl -X PUT http://localhost:4000/api/parts/BRG-22045 \
 { "success": true, "message": "Part BRG-22045 was updated", "part": { "inventoryLevel": 190 } }
 ```
 
+The UI sends only the fields the engineer actually edited, so the audit trail reflects the real change.
 Every successful update inserts a row into `audit_log` recording the part, the changed field names, the
 actor and the timestamp. Field *values* are deliberately not stored in the audit table so that commercial
 data cannot leak through it.

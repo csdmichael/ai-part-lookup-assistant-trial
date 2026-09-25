@@ -49,8 +49,9 @@ export interface StubResponse {
 }
 
 /** Minimal fetch double so component tests exercise the real API client code path. */
-export function installFetchStub(handler: (url: string, init?: RequestInit) => StubResponse): jest.Mock {
-  const mock = jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+export function installFetchStub(handler: (url: string, init?: RequestInit) => StubResponse) {
+  const original = global.fetch;
+  const stub = jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const { status, body } = handler(String(input), init);
     return {
       ok: status >= 200 && status < 300,
@@ -59,6 +60,35 @@ export function installFetchStub(handler: (url: string, init?: RequestInit) => S
     } as Response;
   });
 
-  global.fetch = mock as unknown as typeof fetch;
-  return mock as unknown as jest.Mock;
+  // jsdom does not implement fetch, so spyOn is only possible once a stub exists.
+  global.fetch = stub as unknown as typeof fetch;
+  registerRestore(() => {
+    global.fetch = original;
+  });
+
+  return stub;
+}
+
+/** Replaces fetch with an implementation that always fails, simulating a lost connection. */
+export function installFetchFailure(): void {
+  const original = global.fetch;
+  global.fetch = jest.fn(async () => {
+    throw new Error('network down');
+  }) as unknown as typeof fetch;
+  registerRestore(() => {
+    global.fetch = original;
+  });
+}
+
+const restoreCallbacks: Array<() => void> = [];
+
+function registerRestore(callback: () => void): void {
+  restoreCallbacks.push(callback);
+}
+
+/** Call from afterEach so the global environment is reset between tests. */
+export function restoreFetch(): void {
+  while (restoreCallbacks.length > 0) {
+    restoreCallbacks.pop()?.();
+  }
 }

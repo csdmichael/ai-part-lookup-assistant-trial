@@ -12,8 +12,8 @@ export function FeedbackBanner({ tone, message, details = [], onDismiss }: Feedb
         <p className="banner-message">{message}</p>
         {details.length > 0 ? (
           <ul className="banner-details">
-            {details.map((detail) => (
-              <li key={detail}>{detail}</li>
+            {details.map((detail, index) => (
+              <li key={`${index}-${detail}`}>{detail}</li>
             ))}
           </ul>
         ) : null}

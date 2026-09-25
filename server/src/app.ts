@@ -35,6 +35,8 @@ export function createApp({
 
   app.disable('x-powered-by');
   app.use(helmet());
+  // CORS runs first so throttled (429) responses still carry the headers the browser needs.
+  app.use(cors({ origin: allowedOrigins.length > 0 ? allowedOrigins : false }));
   app.use(
     rateLimit({
       windowMs: 60_000,
@@ -46,7 +48,6 @@ export function createApp({
       }
     })
   );
-  app.use(cors({ origin: allowedOrigins.length > 0 ? allowedOrigins : false }));
   app.use(express.json({ limit: '32kb' }));
   app.use(requestLogger(logger));
 

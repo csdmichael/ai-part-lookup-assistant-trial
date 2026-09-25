@@ -17,12 +17,33 @@ interface ApiErrorBody {
   error?: { message?: string; details?: FieldError[] };
 }
 
+/** Normalises any HeadersInit shape while keeping the JSON default unless the caller overrides it. */
+function mergeHeaders(init?: HeadersInit): Record<string, string> {
+  const headers: Record<string, string> = { 'content-type': 'application/json' };
+
+  if (!init) {
+    return headers;
+  }
+
+  const entries: Array<[string, string]> = Array.isArray(init)
+    ? init.map(([key, value]) => [key, value])
+    : typeof Headers !== 'undefined' && init instanceof Headers
+      ? Array.from(init.entries())
+      : Object.entries(init as Record<string, string>);
+
+  entries.forEach(([key, value]) => {
+    headers[key.toLowerCase()] = value;
+  });
+
+  return headers;
+}
+
 async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
     response = await fetch(`${API_BASE}${path}`, {
       ...init,
-      headers: { 'content-type': 'application/json', ...(init?.headers ?? {}) }
+      headers: mergeHeaders(init?.headers)
     });
   } catch {
     throw new ApiError('We could not reach the part service. Check your connection and try again.', 0);

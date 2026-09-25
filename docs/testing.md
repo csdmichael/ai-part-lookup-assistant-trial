@@ -30,7 +30,7 @@ Each test builds an isolated in-memory SQLite database seeded with the sample da
 | File | What it protects |
 |---|---|
 | `App.test.tsx` | Search → review → update happy path, "no results" messaging, server validation surfaced in the UI, network failure messaging, and that masked values are never rendered |
-| `validation.test.tsx` | Client-side search and update validation, including the obsolete/reorder-point rule, and that invalid forms are never submitted |
+| `validation.test.tsx` | Client-side search and update validation, the obsolete/reorder-point rule, that invalid forms are never submitted, and that only edited fields are sent |
 
 The tests drive the real components and the real API client through a `fetch` double, so request shapes
 and response handling are exercised rather than mocked away.

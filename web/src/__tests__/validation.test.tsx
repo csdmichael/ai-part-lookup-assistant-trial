@@ -77,11 +77,47 @@ describe('client side input validation', () => {
     await user.type(reorderField, '80');
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
 
-    expect(onSubmit).toHaveBeenCalledWith({
-      inventoryLevel: 184,
-      reorderPoint: 80,
-      warehouseLocation: 'WH1-A-12-3',
-      lifecycleStatus: 'active'
-    });
+    expect(onSubmit).toHaveBeenCalledWith({ reorderPoint: 80 });
+  });
+
+  it('only sends the fields the engineer actually changed', async () => {
+    const user = userEvent.setup();
+    const onSubmit = jest.fn();
+    render(
+      <UpdatePartForm
+        part={bearingDetail}
+        isSaving={false}
+        serverErrors={[]}
+        onCancel={jest.fn()}
+        onSubmit={onSubmit}
+      />
+    );
+
+    const inventoryField = screen.getByLabelText('Inventory level');
+    await user.clear(inventoryField);
+    await user.type(inventoryField, '200');
+    await user.selectOptions(screen.getByLabelText('Lifecycle status'), 'restricted');
+    await user.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(onSubmit).toHaveBeenCalledWith({ inventoryLevel: 200, lifecycleStatus: 'restricted' });
+  });
+
+  it('explains that there is nothing to save when no field was edited', async () => {
+    const user = userEvent.setup();
+    const onSubmit = jest.fn();
+    render(
+      <UpdatePartForm
+        part={bearingDetail}
+        isSaving={false}
+        serverErrors={[]}
+        onCancel={jest.fn()}
+        onSubmit={onSubmit}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(screen.getByRole('alert')).toHaveTextContent('There are no changes to save.');
   });
 });
