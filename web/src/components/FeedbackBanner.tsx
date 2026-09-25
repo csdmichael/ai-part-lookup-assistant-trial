@@ -7,7 +7,7 @@ interface FeedbackBannerProps {
 
 export function FeedbackBanner({ tone, message, details = [], onDismiss }: FeedbackBannerProps) {
   return (
-    <div className={`banner banner-${tone}`} role={tone === 'error' ? 'alert' : 'status'} aria-live="polite">
+    <div className={`banner banner-${tone}`} role={tone === 'error' ? 'alert' : 'status'}>
       <div>
         <p className="banner-message">{message}</p>
         {details.length > 0 ? (

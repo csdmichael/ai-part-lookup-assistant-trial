@@ -30,6 +30,8 @@ that the masked values never appear in API responses or in the rendered UI.
   Updates are restricted to an allow-list of column names.
 - `helmet` sets the standard security headers and `x-powered-by` is disabled.
 - CORS is closed by default and only opens for explicitly configured origins.
+- Every route (including the static UI fallback) is throttled to 600 requests per client IP per minute;
+  API Management applies an additional quota in front of the service.
 - App Service is provisioned with HTTPS only and TLS 1.2 minimum; API Management adds HSTS and throttling.
 
 ## Logging and audit
@@ -57,4 +59,5 @@ identity federation instead of stored credentials. `npm audit --audit-level=high
 - There is no end-user authentication; the `x-user-id` header is trusted for audit purposes only. A
   production rollout should place Microsoft Entra ID authentication in front of the API (App Service
   authentication or API Management validate-jwt) and derive the actor from the token.
-- Rate limiting is applied at API Management rather than in the Node process.
+- In-process rate limiting counts the direct socket address, so behind a proxy the gateway quota in
+  `infra/apim-policy.xml` remains the primary throttling control.

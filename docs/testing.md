@@ -20,6 +20,7 @@ Coverage reports can be produced with `npm test --workspace server -- --coverage
 | `partsDetail.test.ts` | Unified record contents, masking, case-insensitive lookup, 404 and malformed part numbers |
 | `partsUpdate.test.ts` | Successful updates, audit entries, actor sanitisation, every validation rule, rejected sensitive fields, malformed JSON |
 | `masking.test.ts` | Masking helpers, detail view redaction and the logger redaction rules |
+| `rateLimit.test.ts` | Per-IP request throttling returns `429` with the standard error envelope |
 
 Each test builds an isolated in-memory SQLite database seeded with the sample data
 (`createTestContext()` in `testContext.ts`), so tests are independent and repeatable.

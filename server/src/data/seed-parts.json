@@ -1,0 +1,306 @@
+{
+  "suppliers": [
+    {
+      "id": "SUP-1001",
+      "name": "Acme Precision Components",
+      "contactEmail": "orders@acme-precision.example.com",
+      "contactPhone": "+1-216-555-0142",
+      "country": "United States",
+      "qualityRating": 4.6
+    },
+    {
+      "id": "SUP-1002",
+      "name": "Nordwerk Industrieteile GmbH",
+      "contactEmail": "vertrieb@nordwerk.example.de",
+      "contactPhone": "+49-711-555-0188",
+      "country": "Germany",
+      "qualityRating": 4.8
+    },
+    {
+      "id": "SUP-1003",
+      "name": "Kyoto Seimitsu Co., Ltd.",
+      "contactEmail": "sales@kyoto-seimitsu.example.jp",
+      "contactPhone": "+81-75-555-0119",
+      "country": "Japan",
+      "qualityRating": 4.4
+    },
+    {
+      "id": "SUP-1004",
+      "name": "Brightline Fasteners Ltd.",
+      "contactEmail": "support@brightline-fasteners.example.co.uk",
+      "contactPhone": "+44-161-555-0173",
+      "country": "United Kingdom",
+      "qualityRating": 3.9
+    },
+    {
+      "id": "SUP-1005",
+      "name": "Cascade Polymer Systems",
+      "contactEmail": "csr@cascadepolymer.example.com",
+      "contactPhone": "+1-503-555-0164",
+      "country": "United States",
+      "qualityRating": 4.1
+    }
+  ],
+  "parts": [
+    {
+      "partNumber": "BRG-22045",
+      "partName": "Deep groove ball bearing 45 mm",
+      "description": "Sealed deep groove ball bearing, 45 mm bore, chrome steel, for gearbox output shafts.",
+      "category": "Bearings",
+      "unitOfMeasure": "EA",
+      "inventoryLevel": 184,
+      "reorderPoint": 60,
+      "warehouseLocation": "WH1-A-12-3",
+      "lifecycleStatus": "active",
+      "unitCostUsd": 18.42,
+      "internalNotes": "Negotiated tier-2 pricing valid until 2026-12-31. Contract owner: procurement desk 4.",
+      "supplierId": "SUP-1001",
+      "updatedAt": "2026-08-14T09:12:00.000Z"
+    },
+    {
+      "partNumber": "SEN-70310",
+      "partName": "Inductive proximity sensor M18",
+      "description": "M18 inductive proximity sensor, 8 mm sensing range, IP67, PNP normally open.",
+      "category": "Sensors",
+      "unitOfMeasure": "EA",
+      "inventoryLevel": 42,
+      "reorderPoint": 50,
+      "warehouseLocation": "WH1-C-04-1",
+      "lifecycleStatus": "active",
+      "unitCostUsd": 63.9,
+      "internalNotes": "Single-source risk. Dual-sourcing study open with Nordwerk.",
+      "supplierId": "SUP-1002",
+      "updatedAt": "2026-09-02T14:45:00.000Z"
+    },
+    {
+      "partNumber": "GSK-11876",
+      "partName": "Silicone gasket 120 mm",
+      "description": "Food-grade silicone flange gasket, 120 mm nominal diameter, -50 to 200 degrees C.",
+      "category": "Seals and gaskets",
+      "unitOfMeasure": "EA",
+      "inventoryLevel": 610,
+      "reorderPoint": 200,
+      "warehouseLocation": "WH2-B-08-4",
+      "lifecycleStatus": "active",
+      "unitCostUsd": 3.15,
+      "internalNotes": "Lot traceability required for regulated customers.",
+      "supplierId": "SUP-1005",
+      "updatedAt": "2026-07-29T08:05:00.000Z"
+    },
+    {
+      "partNumber": "MTR-40920",
+      "partName": "Servo motor 750 W",
+      "description": "AC servo motor, 750 W, 3000 rpm, absolute encoder, keyed shaft.",
+      "category": "Drives and motors",
+      "unitOfMeasure": "EA",
+      "inventoryLevel": 7,
+      "reorderPoint": 10,
+      "warehouseLocation": "WH1-D-01-2",
+      "lifecycleStatus": "active",
+      "unitCostUsd": 742.0,
+      "internalNotes": "Allocation constrained by supplier until Q1. Escalation path: category manager.",
+      "supplierId": "SUP-1003",
+      "updatedAt": "2026-09-10T11:30:00.000Z"
+    },
+    {
+      "partNumber": "FST-30011",
+      "partName": "Hex flange bolt M8x30",
+      "description": "Zinc-flake coated hex flange bolt, M8 x 30 mm, property class 10.9.",
+      "category": "Fasteners",
+      "unitOfMeasure": "BOX",
+      "inventoryLevel": 1240,
+      "reorderPoint": 400,
+      "warehouseLocation": "WH2-A-02-1",
+      "lifecycleStatus": "active",
+      "unitCostUsd": 0.36,
+      "internalNotes": "Consignment stock agreement in place.",
+      "supplierId": "SUP-1004",
+      "updatedAt": "2026-06-18T16:20:00.000Z"
+    },
+    {
+      "partNumber": "PCB-88130",
+      "partName": "Controller board rev C",
+      "description": "Machine controller board revision C, CAN and EtherCAT interfaces, conformal coated.",
+      "category": "Electronics",
+      "unitOfMeasure": "EA",
+      "inventoryLevel": 23,
+      "reorderPoint": 15,
+      "warehouseLocation": "WH1-E-06-2",
+      "lifecycleStatus": "pending-approval",
+      "unitCostUsd": 388.75,
+      "internalNotes": "Revision C awaiting engineering release; do not issue to production orders.",
+      "supplierId": "SUP-1002",
+      "updatedAt": "2026-09-17T07:55:00.000Z"
+    },
+    {
+      "partNumber": "HYD-55402",
+      "partName": "Hydraulic hose assembly 1/2 in",
+      "description": "Two-wire braided hydraulic hose assembly, 1/2 inch, 1.5 m, JIC 37 degree ends.",
+      "category": "Hydraulics",
+      "unitOfMeasure": "EA",
+      "inventoryLevel": 96,
+      "reorderPoint": 40,
+      "warehouseLocation": "WH2-C-11-3",
+      "lifecycleStatus": "active",
+      "unitCostUsd": 54.2,
+      "internalNotes": "Shelf-life controlled: 5 years from cure date.",
+      "supplierId": "SUP-1001",
+      "updatedAt": "2026-08-30T13:02:00.000Z"
+    },
+    {
+      "partNumber": "FLT-19004",
+      "partName": "Hydraulic return filter element",
+      "description": "10 micron glass fibre return line filter element with bypass indicator.",
+      "category": "Filtration",
+      "unitOfMeasure": "EA",
+      "inventoryLevel": 0,
+      "reorderPoint": 25,
+      "warehouseLocation": "WH2-C-12-1",
+      "lifecycleStatus": "active",
+      "unitCostUsd": 47.8,
+      "internalNotes": "Stock-out since 2026-09-05, expedite request raised.",
+      "supplierId": "SUP-1005",
+      "updatedAt": "2026-09-19T06:41:00.000Z"
+    },
+    {
+      "partNumber": "CBL-60277",
+      "partName": "Shielded servo cable 5 m",
+      "description": "Shielded servo power cable, 5 m, drag-chain rated, pre-assembled connectors.",
+      "category": "Cables",
+      "unitOfMeasure": "EA",
+      "inventoryLevel": 58,
+      "reorderPoint": 20,
+      "warehouseLocation": "WH1-D-03-4",
+      "lifecycleStatus": "active",
+      "unitCostUsd": 128.5,
+      "internalNotes": "Cross-reference legacy part CBL-60211 for retrofits.",
+      "supplierId": "SUP-1003",
+      "updatedAt": "2026-07-11T10:18:00.000Z"
+    },
+    {
+      "partNumber": "VLV-77320",
+      "partName": "Pneumatic solenoid valve 5/2",
+      "description": "5/2 way single solenoid valve, 24 V DC, G1/4, with manual override.",
+      "category": "Pneumatics",
+      "unitOfMeasure": "EA",
+      "inventoryLevel": 15,
+      "reorderPoint": 0,
+      "warehouseLocation": "WH1-B-09-2",
+      "lifecycleStatus": "obsolete",
+      "unitCostUsd": 92.3,
+      "internalNotes": "Superseded by VLV-77325. Consume remaining stock on service orders only.",
+      "supplierId": "SUP-1004",
+      "updatedAt": "2026-05-22T15:47:00.000Z"
+    }
+  ],
+  "purchaseOrders": [
+    {
+      "poNumber": "PO-2026-004182",
+      "partNumber": "BRG-22045",
+      "quantity": 120,
+      "unitPriceUsd": 18.1,
+      "status": "confirmed",
+      "orderDate": "2026-09-01",
+      "expectedDeliveryDate": "2026-10-06"
+    },
+    {
+      "poNumber": "PO-2026-004190",
+      "partNumber": "BRG-22045",
+      "quantity": 60,
+      "unitPriceUsd": 18.42,
+      "status": "received",
+      "orderDate": "2026-07-14",
+      "expectedDeliveryDate": "2026-08-12"
+    },
+    {
+      "poNumber": "PO-2026-004221",
+      "partNumber": "SEN-70310",
+      "quantity": 80,
+      "unitPriceUsd": 61.75,
+      "status": "in-transit",
+      "orderDate": "2026-09-08",
+      "expectedDeliveryDate": "2026-09-30"
+    },
+    {
+      "poNumber": "PO-2026-004077",
+      "partNumber": "GSK-11876",
+      "quantity": 500,
+      "unitPriceUsd": 3.02,
+      "status": "received",
+      "orderDate": "2026-06-30",
+      "expectedDeliveryDate": "2026-07-22"
+    },
+    {
+      "poNumber": "PO-2026-004233",
+      "partNumber": "MTR-40920",
+      "quantity": 12,
+      "unitPriceUsd": 738.5,
+      "status": "open",
+      "orderDate": "2026-09-12",
+      "expectedDeliveryDate": "2026-11-18"
+    },
+    {
+      "poNumber": "PO-2026-004244",
+      "partNumber": "MTR-40920",
+      "quantity": 4,
+      "unitPriceUsd": 751.0,
+      "status": "in-transit",
+      "orderDate": "2026-08-25",
+      "expectedDeliveryDate": "2026-10-02"
+    },
+    {
+      "poNumber": "PO-2026-003998",
+      "partNumber": "FST-30011",
+      "quantity": 2000,
+      "unitPriceUsd": 0.34,
+      "status": "confirmed",
+      "orderDate": "2026-09-03",
+      "expectedDeliveryDate": "2026-10-15"
+    },
+    {
+      "poNumber": "PO-2026-004250",
+      "partNumber": "PCB-88130",
+      "quantity": 25,
+      "unitPriceUsd": 382.0,
+      "status": "open",
+      "orderDate": "2026-09-18",
+      "expectedDeliveryDate": "2026-12-04"
+    },
+    {
+      "poNumber": "PO-2026-004108",
+      "partNumber": "HYD-55402",
+      "quantity": 60,
+      "unitPriceUsd": 53.4,
+      "status": "received",
+      "orderDate": "2026-07-20",
+      "expectedDeliveryDate": "2026-08-19"
+    },
+    {
+      "poNumber": "PO-2026-004262",
+      "partNumber": "FLT-19004",
+      "quantity": 100,
+      "unitPriceUsd": 46.9,
+      "status": "in-transit",
+      "orderDate": "2026-09-19",
+      "expectedDeliveryDate": "2026-09-29"
+    },
+    {
+      "poNumber": "PO-2026-004140",
+      "partNumber": "CBL-60277",
+      "quantity": 40,
+      "unitPriceUsd": 126.0,
+      "status": "confirmed",
+      "orderDate": "2026-08-28",
+      "expectedDeliveryDate": "2026-10-09"
+    },
+    {
+      "poNumber": "PO-2026-003950",
+      "partNumber": "VLV-77320",
+      "quantity": 20,
+      "unitPriceUsd": 91.0,
+      "status": "cancelled",
+      "orderDate": "2026-05-15",
+      "expectedDeliveryDate": "2026-06-26"
+    }
+  ]
+}

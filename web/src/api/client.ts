@@ -21,8 +21,8 @@ async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
     response = await fetch(`${API_BASE}${path}`, {
-      headers: { 'content-type': 'application/json', ...(init?.headers ?? {}) },
-      ...init
+      ...init,
+      headers: { 'content-type': 'application/json', ...(init?.headers ?? {}) }
     });
   } catch {
     throw new ApiError('We could not reach the part service. Check your connection and try again.', 0);

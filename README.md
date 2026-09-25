@@ -31,7 +31,7 @@ npm run build        # type-checks and builds the API and the UI
 npm test             # runs the API and UI test suites
 ```
 
-Run the application in development (two terminals, or `npm run dev` for both):
+Run the application in development (one terminal per workspace):
 
 ```bash
 npm run dev --workspace server   # API on http://localhost:4000
@@ -53,6 +53,8 @@ npm start            # http://localhost:4000
 | `DATABASE_FILE` | `<cwd>/data/part-lookup.sqlite` | SQLite database file; seeded on first start |
 | `ALLOWED_ORIGINS` | `http://localhost:5173` | Comma separated CORS origins |
 | `STATIC_DIR` | `../web/dist` | Built UI served by the API |
+
+Requests are throttled to 600 per client IP per minute, and security headers are applied with `helmet`.
 
 No secrets are required to run the trial application, and none are committed to the repository.
 
