@@ -1,0 +1,20 @@
+{
+  "name": "ai-part-lookup-assistant-trial",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI Part Lookup Assistant - unified part, inventory, supplier and purchase order lookup",
+  "license": "MIT",
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "npm run build --workspace server && npm run build --workspace web",
+    "lint": "npm run lint --workspace server && npm run lint --workspace web",
+    "test": "npm run test --workspace server && npm run test --workspace web",
+    "start": "npm run start --workspace server"
+  }
+}
